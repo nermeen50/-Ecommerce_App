@@ -1,0 +1,3 @@
+mvvm 
+firebase (backend)
+getx (statemanagement)
