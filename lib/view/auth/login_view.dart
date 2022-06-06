@@ -5,7 +5,7 @@ import 'package:ecommerce_app/custom_widget/custom_soical_button.dart';
 import 'package:ecommerce_app/custom_widget/custom_text.dart';
 import 'package:ecommerce_app/custom_widget/custom_textfield.dart';
 import 'package:ecommerce_app/view/auth/signUp_view.dart';
-import 'package:ecommerce_app/view_model/auth_view_model/auth_view_model.dart';
+import 'package:ecommerce_app/view_model/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

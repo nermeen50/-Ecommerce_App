@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/model/user_model.dart';
 
@@ -11,7 +9,6 @@ class FireStoreUserService {
     // Call the user's CollectionReference to add a new user
     return await _collectionReference
         .doc(userModel.userId)
-        .set(userModel.toJson())
-        .then((value) => log("message"));
+        .set(userModel.toJson());
   }
 }

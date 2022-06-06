@@ -6,7 +6,7 @@ class UserModel {
   UserModel({this.userId, this.email, this.name, this.pic});
   factory UserModel.fromJson(Map<String, dynamic> json) {
     if (json == null) {
-      return UserModel(userId: null, email: null, name: null, pic: null);
+      return UserModel();
     } else {
       return UserModel(
         userId: json['userId'],
