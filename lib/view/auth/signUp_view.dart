@@ -1,11 +1,15 @@
+import 'package:ecommerce_app/core/constant/app_color.dart';
+import 'package:ecommerce_app/core/validation.dart';
 import 'package:ecommerce_app/custom_widget/custom_button.dart';
 import 'package:ecommerce_app/custom_widget/custom_text.dart';
 import 'package:ecommerce_app/custom_widget/custom_textfield.dart';
+import 'package:ecommerce_app/view_model/auth_view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignUpView extends StatelessWidget {
-  const SignUpView({Key? key}) : super(key: key);
+class SignUpView extends GetWidget<AuthViewModel> with Validations {
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  SignUpView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,47 +22,64 @@ class SignUpView extends StatelessWidget {
               onPressed: () => Get.back(),
               icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black))),
       body: SingleChildScrollView(
-        child: Container(
-            padding: const EdgeInsets.all(15),
-            margin: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: Colors.white),
-            child: Column(children: [
-              const CustomText(text: 'Sign Up', fontSize: 30),
-              const SizedBox(height: 25),
-              CustomTextField(
-                keyboardType: TextInputType.name,
-                lable: 'Name',
-                hint: 'Enter your name',
-                validator: (value) {
-                  return null;
-                },
-                onSaved: (value) {},
-              ),
-              const SizedBox(height: 25),
-              CustomTextField(
-                lable: 'Email',
-                hint: 'Enter your email',
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  return null;
-                },
-                onSaved: (value) {},
-              ),
-              const SizedBox(height: 25),
-              CustomTextField(
-                lable: 'Password',
-                keyboardType: TextInputType.visiblePassword,
-                hint: 'Enter your Password',
-                obscureText: true,
-                validator: (value) {
-                  return null;
-                },
-                onSaved: (value) {},
-              ),
-              const SizedBox(height: 20),
-              const CustomButton(text: 'Sign Up'),
-            ])),
+        child: Form(
+          key: _globalKey,
+          child: Container(
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), color: Colors.white),
+              child: Column(children: [
+                const CustomText(text: 'Sign Up', fontSize: 30),
+                const SizedBox(height: 25),
+                CustomTextField(
+                  controller: controller.name.value,
+                  keyboardType: TextInputType.name,
+                  lable: 'Name',
+                  hint: 'Enter your name',
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Enter your name";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 25),
+                CustomTextField(
+                  controller: controller.registerEmail.value,
+                  lable: 'Email',
+                  hint: 'Enter your email',
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) => validateEmail(value),
+                ),
+                const SizedBox(height: 25),
+                Obx(() => CustomTextField(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            controller.visablePassword();
+                          },
+                          icon: controller.isObscure.value
+                              ? const Icon(Icons.visibility)
+                              : const Icon(Icons.visibility_off)),
+                      controller: controller.registerPassword.value,
+                      obscureText: controller.isObscure.value ? false : true,
+                      keyboardType: TextInputType.visiblePassword,
+                      lable: 'Password',
+                      hint: 'Enter your Password',
+                      validator: (value) => validatePassword(value),
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => controller.isLoading.value
+                    ? CircularProgressIndicator(color: AppColors.primaryColor)
+                    : CustomButton(
+                        text: 'Sign Up',
+                        press: () {
+                          if (_globalKey.currentState!.validate()) {
+                            controller.createAccountWithEmailAndPassword();
+                          }
+                        }))
+              ])),
+        ),
       ),
     );
   }

@@ -7,7 +7,10 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final Function(String?)? onSaved;
-  final String? Function(String?)? validator;
+  final FormFieldValidator? validator;
+  final TextEditingController? controller;
+  final Widget? suffixIcon;
+  final Function(String)? onChanged;
   const CustomTextField(
       {Key? key,
       this.lable = '',
@@ -15,7 +18,10 @@ class CustomTextField extends StatelessWidget {
       this.onSaved,
       this.validator,
       this.keyboardType,
-      this.obscureText = false})
+      this.obscureText = false,
+      this.controller,
+      this.suffixIcon,
+      this.onChanged})
       : super(key: key);
 
   @override
@@ -24,11 +30,14 @@ class CustomTextField extends StatelessWidget {
       children: [
         CustomText(text: lable, color: Colors.grey, fontSize: 14),
         TextFormField(
+          onChanged: onChanged,
+          controller: controller,
           onSaved: onSaved,
           validator: validator,
           keyboardType: keyboardType,
           obscureText: obscureText,
           decoration: InputDecoration(
+              suffixIcon: suffixIcon,
               hintText: hint,
               hintStyle: const TextStyle(fontSize: 14, color: Colors.grey)),
         )
